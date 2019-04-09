@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
-* Студент: [Неопознанный енот](https://up.htmlacademy.ru/php/9/user/809925).
-* Наставник: `Неизвестно`.
+* Студент: [Екатерина Галимьянова](https://up.htmlacademy.ru/php/9/user/809925).
+* Наставник: [Олег Головахин](https://htmlacademy.ru/profile/id849005).
 
 ---
 
