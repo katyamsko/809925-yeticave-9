@@ -87,6 +87,23 @@ $user_name = 'Екатерина'; // укажите здесь ваше имя
   'URL' => 'img/lot-6.jpg'
   ];
   $ads = [$ad1, $ad2, $ad3, $ad4, $ad5, $ad6];
+  $price = function($argument) {
+    $finalPrice = ceil($argument);
+    if ($finalPrice < 1000) {
+      return $finalPrice. ' ₽';
+    }
+    else {
+    //1й вариант
+      return $finalPrice = number_format($finalPrice, 0, '.', ' ').' ₽';
+    // 2-й вариант
+    //  $num = (string)$finalPrice;
+    //  $length = strlen($num);
+    //  $left = substr($num, 0, $length - 3);
+    //  $right = substr($num, -3);
+    //  return $left.' '.$right.' ₽';
+    }
+  }
+
  ?>
 <main class="container">
     <section class="promo">
@@ -118,7 +135,7 @@ $user_name = 'Екатерина'; // укажите здесь ваше имя
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$value['price']; ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=$price($value['price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
