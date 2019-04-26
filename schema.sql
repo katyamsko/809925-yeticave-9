@@ -15,7 +15,7 @@ CREATE TABLE lot (
   description TEXT,
   image CHAR(128),
   start_price INT,
-  end_time TIMESTAMP,
+  end_time TIMESTAMP NULL,
   step_rate INT,
   author_id INT,
   winner_id INT,
