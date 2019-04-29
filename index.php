@@ -16,11 +16,12 @@ if (!$link) {
     } else {
         $error = mysqli_error($link);
         print($error);
+        die();
     }
 
     $sql = 'SELECT l.id, l.name, l.image, l.start_price, c.name as category FROM lot as l '
          . 'JOIN category as c ON l.category_id = c.id '
-         . 'WHERE l.end_time IS NULL '
+         . 'WHERE l.end_time < NOW() '
          . 'ORDER BY l.lot_time DESC LIMIT 9';
 
     if ($res = mysqli_query($link, $sql)) {
@@ -36,6 +37,7 @@ if (!$link) {
     else {
         $error = mysqli_error($link);
         print($error);
+        die();
     }
 }
 
