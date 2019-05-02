@@ -4,6 +4,8 @@ require_once('data.php');
 require_once('functions.php');
 require_once('init.php');
 
+$page_title = "Yeticave | Ошибка запроса";
+
 if (!$link) {
     $error = mysqli_connect_error();
     $page_content = include_template('error.php', ['error' => $error]);
@@ -15,7 +17,7 @@ if (!$link) {
         $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         if (isset($_GET['id'])) {
-            $id_lot = $_GET['id'];
+            $id_lot = (int)$_GET['id'];
 
             $sql = 'SELECT l.name as lot_name, l.lot_time, l.description, l.image, l.end_time, c.name as category, MAX(r.price) as current_price FROM lot as l '
             . 'JOIN category as c '
@@ -36,6 +38,7 @@ if (!$link) {
                         'showedTime' => $resultTime['time'],
                         'class_item' => $resultTime['class']
                     ]);
+                    $page_title = $lot['lot_name'];
                 } else {
                     $page_content = include_template('404.php', ['categories' => $categories]);
                 }
@@ -55,7 +58,7 @@ if (!$link) {
 
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
-    'title' => 'Главная',
+    'title' => $page_title,
     'categories' => $categories,
     'ads' => $ads,
     'price' => $price,
