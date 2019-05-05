@@ -31,30 +31,42 @@ if (!$link) {
                 }
             }
 
-            if ((int)$_POST['lot-rate'] <= 0) {
+            if (!empty($_POST['lot-rate']) && (int)$_POST['lot-rate'] <= 0) {
                 $errors['lot-rate'] = 'Введите число > 0';
             }
 
-            if ((int)$_POST['lot-step'] <= 0) {
+            if (!empty($_POST['lot-step']) && (int)$_POST['lot-step'] <= 0) {
                 $errors['lot-step'] = 'Введите число > 0';
             }
 
-            $lot_date = strtotime($_POST['lot-date']);
-            $now = strtotime('now');
-            $diff = floor(($lot_date - $now) / 86400);
+            if (!empty($_POST['lot-date'])) {
+                $date = $_POST['lot-date'];
 
-            if ($diff < 0) {
-                $errors['lot-date'] = 'Неверная дата';
+                if (strlen($date) != 10 || $date[4] !== '-' || $date[7] !== '-') {
+                    $errors['lot-date'] = 'Следуйте указанному формату';
+                } else {
+                    if ((int)substr($date, 0, 4) < 2019 || (int)substr($date, 5, 2) <= 0 || (int)substr($date, 5, 2) > 12 || (int)substr($date, -2, 2) <= 0 || (int)substr($date, -2, 2) > 31) {
+                        $errors['lot-date'] = 'Введите реальную дату';
+                    } else {
+                        $lot_date = strtotime($_POST['lot-date']);
+                        $now = strtotime('now');
+                        $diff = floor(($lot_date - $now) / 86400);
+
+                        if ($diff < 0) {
+                            $errors['lot-date'] = 'Объявление должно быть доступно хотя бы 1 день';
+                        }
+                    }
+                }
             }
 
             if ($_FILES['lot_image']['size'] > 0) {
                 $tmp_name = $_FILES['lot_image']['tmp_name'];
-                $path = $_FILES['lot_image']['name'];
+                $path = uniqid() . $_FILES['lot_image']['name'];
 
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $file_type = finfo_file($finfo, $tmp_name);
 
-                if ($file_type !== "image/png" && $file_type !== "image/jpeg") {
+                if ($file_type !== "image/png" && $file_type !== "image/jpeg" && $file_type !== "image/") {
                     $errors['file'] = 'Загрузите картинку в формате GIF';
                 } else {
                     move_uploaded_file($tmp_name, 'uploads/' . $path);
@@ -74,8 +86,6 @@ if (!$link) {
                 ]);
 
             } else {
-
-                move_uploaded_file($_FILES['lot_image']['tmp_name'], 'uploads/' . $filename);
 
                 $sql = 'INSERT INTO lot (lot_time, name, description, image, start_price, end_time, step_rate, author_id, category_id) VALUES (NOW(), ?, ?, ?, ?, ?, ?, 1, ?)';
 
