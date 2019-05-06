@@ -40,24 +40,20 @@ if (!$link) {
             }
 
             if (!empty($_POST['lot-date'])) {
-                $date = $_POST['lot-date'];
+                if (is_date_valid($_POST['lot-date'])) {
+                    $lot_date = strtotime($_POST['lot-date']);
+                    $now = strtotime('now');
+                    $diff = floor(($lot_date - $now) / 86400);
 
-                if (strlen($date) != 10 || $date[4] !== '-' || $date[7] !== '-') {
-                    $errors['lot-date'] = 'Следуйте указанному формату';
-                } else {
-                    if ((int)substr($date, 0, 4) < 2019 || (int)substr($date, 5, 2) <= 0 || (int)substr($date, 5, 2) > 12 || (int)substr($date, -2, 2) <= 0 || (int)substr($date, -2, 2) > 31) {
-                        $errors['lot-date'] = 'Введите реальную дату';
-                    } else {
-                        $lot_date = strtotime($_POST['lot-date']);
-                        $now = strtotime('now');
-                        $diff = floor(($lot_date - $now) / 86400);
-
-                        if ($diff < 0) {
-                            $errors['lot-date'] = 'Объявление должно быть доступно хотя бы 1 день';
-                        }
+                    if ($diff < 0) {
+                        $errors['lot-date'] = 'Объявление должно быть доступно хотя бы 1 день';
                     }
+                } else {
+                $errors['lot-date'] = 'Пожалуйста, введите дату в формате ГГГГ-ММ-ДД';
                 }
             }
+
+
 
             if ($_FILES['lot_image']['size'] > 0) {
                 $tmp_name = $_FILES['lot_image']['tmp_name'];
