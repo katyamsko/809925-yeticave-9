@@ -29,7 +29,7 @@
                 <span class="lot-item__cost"><?=$lot['current_price']; ?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span>12 000 р</span>
+                Мин. ставка <span><?=$price($lot['current_price']); ?></span>
               </div>
             </div>
             <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">

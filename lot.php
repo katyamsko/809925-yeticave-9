@@ -19,7 +19,7 @@ if (!$link) {
         if (isset($_GET['id'])) {
             $id_lot = (int)$_GET['id'];
 
-            $sql = 'SELECT l.name as lot_name, l.lot_time, l.description, l.image, l.end_time, c.name as category, MAX(r.price) as current_price FROM lot as l '
+            $sql = 'SELECT l.name as lot_name, l.start_price, l.lot_time, l.description, l.image, l.end_time, c.name as category, MAX(r.price) as current_price FROM lot as l '
             . 'JOIN category as c '
             . 'ON l.category_id = c.id '
             . 'JOIN rate as r '
@@ -29,6 +29,10 @@ if (!$link) {
             if ($res = mysqli_query($link, $sql)) {
                 $lot_array = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 $lot = $lot_array[0];
+
+                if ($lot['current_price'] == null) {
+                    $lot['current_price'] = $lot['start_price'];
+                }
 
                 if ($lot['lot_name']) {
                     $page_content = include_template('lot.php', [

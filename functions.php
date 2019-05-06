@@ -6,14 +6,7 @@
       return $finalPrice. ' ₽';
     }
     else {
-    //1й вариант
       return $finalPrice = number_format($finalPrice, 0, '.', ' ').' ₽';
-    // 2-й вариант
-    //  $num = (string)$finalPrice;
-    //  $length = strlen($num);
-    //  $left = substr($num, 0, $length - 3);
-    //  $right = substr($num, -3);
-    //  return $left.' '.$right.' ₽';
     }
   };
 
@@ -45,6 +38,7 @@ $days_count = function () {
 
   return $tempArray;
 };
+
 
 $resultTime = $days_count();
 
