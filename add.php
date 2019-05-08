@@ -63,14 +63,14 @@ if (!$link) {
                 $file_type = finfo_file($finfo, $tmp_name);
 
                 if ($file_type !== "image/png" && $file_type !== "image/jpeg" && $file_type !== "image/") {
-                    $errors['file'] = 'Загрузите картинку в формате GIF';
+                    $errors['lot_image'] = 'Загрузите картинку в формате jpeg/jpg/png';
                 } else {
                     move_uploaded_file($tmp_name, 'uploads/' . $path);
                     $new_lot['path'] = 'uploads/' . $path;
                 }
 
             } else {
-                $errors['file'] = 'Вы не загрузили файл';
+                $errors['lot_image'] = 'Вы не загрузили файл';
             }
 
             if (count($errors)) {

@@ -29,6 +29,22 @@ if (!$link) {
                 }
             }
 
+            if ($_FILES['avatar']['size'] > 0) {
+                $tmp_name = $_FILES['avatar']['tmp_name'];
+                $path = uniqid() . $_FILES['avatar']['name'];
+
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $file_type = finfo_file($finfo, $tmp_name);
+
+                if ($file_type !== "image/png" && $file_type !== "image/jpeg" && $file_type !== "image/") {
+                    $errors['avatar'] = 'Загрузите картинку в формате jpeg/jpg/png';
+                } else {
+                    move_uploaded_file($tmp_name, 'uploads/' . $path);
+                    $new_lot['path'] = 'uploads/' . $path;
+                }
+
+            }
+
             if (count($errors)) {
                 $page_content = include_template('sign-up.php', [
                     'categories' => $categories,
@@ -38,6 +54,7 @@ if (!$link) {
                 ]);
 
             } else {
+
                 $email = mysqli_real_escape_string($link, $_POST['email']);
                 $sql = "SELECT id FROM user WHERE email = '$email'";
                 $res = mysqli_query($link, $sql);

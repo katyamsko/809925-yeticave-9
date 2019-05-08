@@ -25,7 +25,7 @@
         <div class="form__item <?=$classname; ?>">
           <label for="lot-name">Наименование <sup>*</sup></label>
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=$value; ?>">
-          <span class="form__error"><?=$errors['lot-name']; ?></span>
+          <span class="form__error"><?=$errors['lot-name'] ? $errors['lot-name'] : "" ?></span>
         </div>
 
         <?php $classname = isset($errors['category']) ? "form__item--invalid" : "";
@@ -38,7 +38,7 @@
                 <option <?php if ($lot['category'] == $value['name']) print('selected'); ?> value="<?=$value['id']; ?>"><?=esc($value['name']); ?></option>
             <? endforeach; ?>
           </select>
-          <span class="form__error"><?=$errors['category']; ?></span>
+          <span class="form__error"><?=$errors['category'] ? $errors['category'] : "" ?></span>
         </div>
       </div>
 
@@ -48,7 +48,7 @@
       <div class="form__item form__item--wide <?=$classname; ?>">
         <label for="message">Описание <sup>*</sup></label>
         <textarea id="message" name="message" placeholder="Напишите описание лота"><?=$value; ?></textarea>
-        <span class="form__error"><?=$errors['message']; ?></span>
+        <span class="form__error"><?=$errors['message'] ? $errors['message'] : "" ?></span>
       </div>
 
         <?php $classname = isset($errors['lot_image']) ? "form__item--invalid" : "";
@@ -61,6 +61,7 @@
           <label for="lot-img">
             Добавить
           </label>
+          <span class="form__error"><?=$errors['lot_image'] ? $errors['lot_image'] : "" ?></span>
         </div>
       </div>
       <div class="form__container-three">
