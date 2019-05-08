@@ -4,6 +4,16 @@ require_once('data.php');
 require_once('functions.php');
 require_once('init.php');
 
+session_start();
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+} else {
+    $is_auth = false;
+    $user_name = "";
+}
+
 $page_title = "Yeticave | Ошибка";
 
 if (!$link) {
@@ -71,7 +81,7 @@ if (!$link) {
 
                     if ($res) {
                         if (empty($errors)) {
-                            header("Location: /index.php");
+                            header("Location: /login.php");
                             exit();
                         } else {
                             $page_content = include_template('sign-up.php', [
@@ -92,10 +102,19 @@ if (!$link) {
                 }
             }
         } else {
-            $page_content = include_template('sign-up.php', [
-                'categories' => $categories
-            ]);
-            $page_title = "Yeticave | Регистрация на сайте";
+            if (isset($_SESSION['user'])) {
+                $text = 'Вы уже зарегистрированы, ' . $_SESSION['user']['name'] . "!";
+
+                $page_content = include_template('welcome.php', [
+                    'text' => $text
+                ]);
+                $page_title = "Yeticave | Повторная регистрация недоступна";
+            } else {
+                $page_content = include_template('sign-up.php', [
+                    'categories' => $categories
+                    ]);
+                $page_title = "Yeticave | Регистрация на сайте";
+            }
         }
 
     } else {
@@ -108,9 +127,7 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-    'ads' => $ads,
     'price' => $price,
-    'user_name' => $user_name,
     'is_auth' => $is_auth
 ]);
 
