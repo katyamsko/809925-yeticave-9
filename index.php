@@ -4,6 +4,16 @@ require_once('data.php');
 require_once('functions.php');
 require_once('init.php');
 
+session_start();
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+} else {
+    $is_auth = false;
+    $user_name = "";
+}
+
 $page_title = "Yeticave | Ошибка";
 
 if (!$link) {
@@ -48,8 +58,8 @@ $layout_content = include_template('layout.php', [
     'categories' => $categories,
     'ads' => $ads,
     'price' => $price,
-    'user_name' => $user_name,
-    'is_auth' => $is_auth
+    'is_auth' => $is_auth,
+    'user_name' => $user_name
 ]);
 
 print($layout_content);
