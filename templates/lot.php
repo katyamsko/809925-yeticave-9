@@ -42,12 +42,12 @@
                 }
             ?>
 
-            <form class="lot-item__form <?=$class; ?>" action="lot.php" method="post" autocomplete="off">
+            <form class="lot-item__form <?=$class; ?>" action="<?="lot.php?id=" . $id_lot; ?>" method="post" autocomplete="off">
 
               <?php $classname = isset($errors['cost']) ? "form__item--invalid" : "";
               $value = isset($lot['cost']) ? $lot['cost'] : ""; ?>
 
-              <p class="lot-item__form-item form__item<?=$classname; ?>">
+              <p class="lot-item__form-item form__item <?=$classname; ?>">
                 <label for="cost">Ваша ставка</label>
                 <input id="cost" type="text" name="cost" placeholder="12 000">
                 <span class="form__error"><?=$errors['cost']; ?></span>
