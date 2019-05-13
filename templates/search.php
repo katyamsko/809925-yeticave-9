@@ -36,13 +36,46 @@
         <?php endforeach; ?>
         </ul>
       </section>
-      <ul class="pagination-list">
-        <li class="pagination-item pagination-item-prev"><a>Назад</a></li>
-        <li class="pagination-item pagination-item-active"><a>1</a></li>
-        <li class="pagination-item"><a href="#">2</a></li>
-        <li class="pagination-item"><a href="#">3</a></li>
-        <li class="pagination-item"><a href="#">4</a></li>
-        <li class="pagination-item pagination-item-next"><a href="#">Вперед</a></li>
-      </ul>
+      <?php if ($pages_count > 1): ?>
+        <ul class="pagination-list">
+          <li class="pagination-item pagination-item-prev">
+            <?php
+              if ($cur_page != 1) {
+                $href = 'href="search.php?q='.$search_string.'&find=Найти&page='.($cur_page-1).'"';
+              } else {
+                $href = '';
+              }
+            ?>
+            <a <?=$href; ?>>
+              Назад
+            </a>
+          </li>
+          <?php foreach ($pages as $page): ?>
+             <?php
+              if ($cur_page != $page) {
+                $href = 'href="search.php?q='.$search_string.'&find=Найти&page='.$page.'"';
+              } else {
+                $href = '';
+              }
+            ?>
+            <li class="pagination-item <?php if ($page == $cur_page): ?>pagination__item--active<?php endif; ?>">
+              <a <?=$href; ?>><?=$page;?></a>
+            </li>
+          <?php endforeach; ?>
+          <li class="pagination-item pagination-item-next">
+            <?php
+              if ($cur_page != $pages_count) {
+                $href = 'href="search.php?q='.$search_string.'&find=Найти&page='.($cur_page+1).'"';
+              } else {
+                $href = '';
+              }
+            ?>
+            <a <?=$href; ?>>
+              Вперед
+            </a>
+          </li>
+        </ul>
+      <?php endif; ?>
     </div>
   </main>
+

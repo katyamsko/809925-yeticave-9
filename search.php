@@ -16,13 +16,29 @@ if (!$link) {
         if ($result) {
             $lots = [];
             $search = $_GET['q'] ?? '';
+            $search_string = trim($search);
 
             if ($search) {
-                $search_string = trim($search);
+                $cur_page = $_GET['page'] ?? 1;
+                $page_items = 3;
+
+                $stmt = db_get_prepare_stmt($link, "SELECT COUNT(*) as cnt FROM lot WHERE MATCH(name, description) AGAINST(?)", [$search_string]);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+
+                $items_count = mysqli_fetch_assoc($result)['cnt'];
+                $pages_count = ceil($items_count / $page_items);
+                $offset = ($cur_page - 1) * $page_items;
+
+                $pages = range(1, $pages_count);
+
                 $sql = 'SELECT l.id as lot_id, l.name as lot_name, l.name, l.image as lot_image, l.end_time as lot_time, l.start_price as start_price, c.name as category FROM lot as l '
                   . ' JOIN category as c'
                   . ' ON l.category_id = c.id'
-                  . ' WHERE MATCH(l.name, description) AGAINST(?)';
+                  . ' WHERE MATCH(l.name, description) AGAINST(?)'
+                  . ' ORDER BY lot_time DESC'
+                  . ' LIMIT ' . $page_items
+                  . ' OFFSET ' . $offset;
 
                 $stmt = db_get_prepare_stmt($link, $sql, [$search_string]);
                 mysqli_stmt_execute($stmt);
@@ -35,10 +51,14 @@ if (!$link) {
                 }
 
                 if (isset($lots[0])) {
-                   $page_content = include_template('search.php', [
+                    $page_content = include_template('search.php', [
                         'lots' => $lots,
                         'categories' => $categories,
-                        'search' => $search
+                        'search' => $search,
+                        'pages_count' => $pages_count,
+                        'pages' => $pages,
+                        'cur_page' => $cur_page,
+                        'search_string' => $search_string
                     ]);
                     $page_title = 'Поиск по запросу «' . $search_string . '»';
                } else {
