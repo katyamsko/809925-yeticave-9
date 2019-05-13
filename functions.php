@@ -42,6 +42,31 @@ $days_count = function () {
 
 $resultTime = $days_count();
 
+$diff_time = function($end_time) {
+    $now = 'now';
+    $diff = strtotime($end_time) - strtotime($now);
 
+    $hours = floor($diff / 3600);
+    $minutes = floor(($diff - $hours * 3600) / 60);
+    $seconds = $diff - $hours * 3600 - $minutes * 60;
+
+    if ($diff < 10) {
+        $result_time = 'Торги окончены';
+    } else {
+       if ($hours < 10) {
+            $hours = '0' . $hours;
+        }
+        if ($minutes < 10) {
+            $minutes = '0' . $minutes;
+        }
+        if ($seconds < 10) {
+            $seconds = '0' . $seconds;
+        }
+
+        $result_time = $hours . ':' . $minutes . ':' . $seconds;
+    }
+
+    return $result_time;
+}
 
 ?>
