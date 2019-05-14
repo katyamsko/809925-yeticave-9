@@ -42,3 +42,5 @@ CREATE TABLE user (
 
 CREATE INDEX lot_name ON lot(name);
 CREATE INDEX category_name ON category(name);
+CREATE FULLTEXT INDEX lot_ft_search
+  ON lot(name, description);
