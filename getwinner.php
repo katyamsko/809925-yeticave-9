@@ -2,7 +2,6 @@
 
 require_once('vendor/autoload.php');
 require_once('init.php');
-require_once('functions.php');
 require_once('helpers.php');
 
 session_start();
@@ -73,4 +72,3 @@ if ($result && $is_auth && mysqli_num_rows($result)) {
     }
 }
 
-?>

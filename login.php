@@ -1,11 +1,19 @@
 <?php
+
 require_once('vendor/autoload.php');
 require_once('helpers.php');
-require_once('data.php');
-require_once('functions.php');
 require_once('init.php');
 
 session_start();
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+    $user_id = $_SESSION['user']['id'];
+} else {
+    $is_auth = false;
+    $user_name = "";
+}
 
 $page_title = "Yeticave | Ошибка";
 
@@ -53,16 +61,16 @@ if (!$link) {
                     }
                 }
 
-                if (count($errors)) {
-                    $page_content = include_template('login.php', [
-                        'categories' => $categories,
-                        'form' => $form,
-                        'errors' => $errors
-                    ]);
-                } else {
+                if (!count($errors)) {
                     header("Location: /index.php");
                     exit();
                 }
+
+                $page_content = include_template('login.php', [
+                    'categories' => $categories,
+                    'form' => $form,
+                    'errors' => $errors
+                ]);
             } else {
                 $page_content = include_template('login.php', [
                     'categories' => $categories

@@ -1,7 +1,7 @@
-create database YetiCave
+create database yeticave
   DEFAULT CHARACTER SET utf8
   DEFAULT COLLATE utf8_general_ci;
-USE YetiCave;
+USE yeticave;
 
 CREATE TABLE category (
   id INT AUTO_INCREMENT primary key,

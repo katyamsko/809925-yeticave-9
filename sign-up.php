@@ -1,8 +1,6 @@
 <?php
 require_once('vendor/autoload.php');
 require_once('helpers.php');
-require_once('data.php');
-require_once('functions.php');
 require_once('init.php');
 
 session_start();
@@ -55,8 +53,8 @@ if (!$link) {
                 }
             }
 
-            if (!filter_var($new_user['email'], FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = 'Введите правильный email';
+            if (!filter_var($new_user['email'], FILTER_VALIDATE_EMAIL) && !isset($errors['email'])) {
+                $errors['email'] = 'Введите корректный email';
             }
 
             if (count($errors)) {
@@ -66,9 +64,7 @@ if (!$link) {
                     'errors' => $errors,
                     'dict' => $dict
                 ]);
-
             } else {
-
                 $email = mysqli_real_escape_string($link, $_POST['email']);
                 $sql = "SELECT id FROM user WHERE email = '$email'";
                 $res = mysqli_query($link, $sql);
@@ -87,19 +83,17 @@ if (!$link) {
                         if (empty($errors)) {
                             header("Location: /login.php");
                             exit();
-                        } else {
-                            $page_content = include_template('sign-up.php', [
-                                'categories' => $categories,
-                                'new_user' => $new_user,
-                                'errors' => $errors,
-                                'dict' => $dict
-                            ]);
                         }
+                        $page_content = include_template('sign-up.php', [
+                            'categories' => $categories,
+                            'new_user' => $new_user,
+                            'errors' => $errors,
+                            'dict' => $dict
+                        ]);
                     } else {
                         $error = mysqli_error($link);
                         $page_content = include_template('error.php', ['error' => $error]);
                     }
-
                 } else {
                     $error = mysqli_error($link);
                     $page_content = include_template('error.php', ['error' => $error]);
@@ -120,7 +114,6 @@ if (!$link) {
                 $page_title = "Yeticave | Регистрация на сайте";
             }
         }
-
     } else {
         $error = mysqli_error($link);
         $page_content = include_template('error.php', ['error' => $error]);
@@ -131,7 +124,6 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-    'price' => $price,
     'is_auth' => $is_auth
 ]);
 
