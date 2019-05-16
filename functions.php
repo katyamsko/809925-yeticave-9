@@ -1,14 +1,16 @@
 <?php
 
-  $price = function($argument) {
-    $finalPrice = ceil($argument);
-    if ($finalPrice < 1000) {
-      return $finalPrice. ' ₽';
-    }
-    else {
-      return $finalPrice = number_format($finalPrice, 0, '.', ' ').' ₽';
-    }
-  };
+require_once('vendor/autoload.php');
+
+$price = function($argument) {
+$finalPrice = ceil($argument);
+if ($finalPrice < 1000) {
+  return $finalPrice. ' ₽';
+}
+else {
+  return $finalPrice = number_format($finalPrice, 0, '.', ' ').' ₽';
+}
+};
 
 function esc($str) {
   $text = htmlspecialchars($str);
@@ -50,20 +52,36 @@ $diff_time = function($end_time) {
     $minutes = floor(($diff - $hours * 3600) / 60);
     $seconds = $diff - $hours * 3600 - $minutes * 60;
 
-    if ($diff < 10) {
-        $result_time = 'Торги окончены';
+    $result_time = [];
+
+    if ($diff < 0) {
+        $result_time['span'] = 'Торги окончены';
     } else {
-       if ($hours < 10) {
-            $hours = '0' . $hours;
-        }
-        if ($minutes < 10) {
-            $minutes = '0' . $minutes;
-        }
-        if ($seconds < 10) {
-            $seconds = '0' . $seconds;
+        if ($hours < 1) {
+            $result_time['timer_class'] = 'timer--finishing';
+        } else {
+            $result_time['timer_class'] = '';
         }
 
-        $result_time = $hours . ':' . $minutes . ':' . $seconds;
+        if ($hours < 10 && $hours > 0) {
+            $hours = '0' . $hours;
+        } elseif ($hours == 0) {
+            $hours = '00';
+        }
+
+        if ($minutes < 10) {
+            $minutes = '0' . $minutes;
+        } elseif ($minutes == 0) {
+            $minutes = '00';
+        }
+
+        if ($seconds < 10) {
+            $seconds = '0' . $seconds;
+        } elseif ($seconds == 0) {
+            $seconds = '00';
+        }
+
+        $result_time['format'] = $hours . ':' . $minutes . ':' . $seconds;
     }
 
     return $result_time;

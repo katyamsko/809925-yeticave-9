@@ -1,4 +1,5 @@
 <?php
+require_once('vendor/autoload.php');
 require_once('helpers.php');
 require_once('data.php');
 require_once('functions.php');
@@ -60,6 +61,24 @@ if (!$link) {
                     $hours = floor($diff / 3600);
                     $minutes = floor(($diff - $hours * 3600) / 60);
                     $seconds = $diff - $hours * 3600 - $minutes * 60;
+
+                    if ($hours < 10 && $hours > 0) {
+                        $hours = '0' . $hours;
+                    } elseif ($hours == 0) {
+                        $hours = '00';
+                    }
+
+                    if ($minutes < 10 && $minutes > 0) {
+                        $minutes = '0' . $minutes;
+                    } elseif ($minutes == 0) {
+                        $minutes = '00';
+                    }
+
+                    if ($seconds < 10 && $seconds > 0) {
+                        $seconds = '0' . $seconds;
+                    } elseif ($seconds == 0) {
+                        $seconds = '00';
+                    }
 
                     if ($diff < 0) {
                         $sql = 'SELECT user_id FROM rate'

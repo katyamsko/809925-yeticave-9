@@ -3,7 +3,7 @@
       <ul class="nav__list container">
         <?php foreach ($categories as $value) :?>
             <li class="nav__item">
-                <a href="pages/all-lots.html"><?=esc($value['name']); ?></a>
+                <a href="all-lots.php?cat=<?=$value['code']; ?>"><?=esc($value['name']); ?></a>
             </li>
         <? endforeach; ?>
       </ul>
@@ -23,11 +23,22 @@
               <h3 class="lot__title"><a class="text-link" href="<?="lot.php" . "?id=" . $value['lot_id']; ?>"><?=$value['lot_name']; ?></a></h3>
               <div class="lot__state">
                 <div class="lot__rate">
-                  <span class="lot__amount">Стартовая цена</span>
+                  <span class="lot__amount">
+
+                  <?php
+                    if ($value['count'] > 0) {
+                      $span_string = $value['rate_status_text'];
+                    } else {
+                        $span_string = 'Стартовая цена';
+                      }
+                  ?>
+                  <?=$span_string; ?>
+
+                  </span>
                   <span class="lot__cost"><?=$value['start_price']; ?><b class="rub">р</b></span>
                 </div>
-                <div class="lot__timer timer">
-                  <?=$value['lot_time']; ?>
+                <div class="lot__timer timer <?=$value['timer_class']; ?>">
+                  <?=$value['format_time']; ?>
                 </div>
               </div>
             </div>

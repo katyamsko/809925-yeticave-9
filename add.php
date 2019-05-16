@@ -1,4 +1,5 @@
 <?php
+require_once('vendor/autoload.php');
 require_once('helpers.php');
 require_once('data.php');
 require_once('functions.php');
@@ -9,6 +10,7 @@ session_start();
 if (isset($_SESSION['user'])) {
     $is_auth = true;
     $user_name = $_SESSION['user']['name'];
+    $user_id = $_SESSION['user']['id'];
 } else {
     $is_auth = false;
     $user_name = "";
@@ -94,9 +96,9 @@ if ($is_auth) {
 
                 } else {
 
-                    $sql = 'INSERT INTO lot (lot_time, name, description, image, start_price, end_time, step_rate, author_id, category_id) VALUES (NOW(), ?, ?, ?, ?, ?, ?, 1, ?)';
+                    $sql = 'INSERT INTO lot (lot_time, name, description, image, start_price, end_time, step_rate, author_id, category_id) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
 
-                    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot['lot-name'], $new_lot['message'], $new_lot['path'], $new_lot['lot-rate'], $new_lot['lot-date'], $new_lot['lot-step'], $new_lot['category']]);
+                    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot['lot-name'], $new_lot['message'], $new_lot['path'], $new_lot['lot-rate'], $new_lot['lot-date'], $new_lot['lot-step'], $user_id, $new_lot['category']]);
                     $res = mysqli_stmt_execute($stmt);
 
                     if ($res) {
