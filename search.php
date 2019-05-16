@@ -1,8 +1,20 @@
 <?php
+require_once('vendor/autoload.php');
 require_once('helpers.php');
 require_once('data.php');
 require_once('functions.php');
 require_once('init.php');
+
+session_start();
+
+if (isset($_SESSION['user'])) {
+    $is_auth = true;
+    $user_name = $_SESSION['user']['name'];
+    $user_id = $_SESSION['user']['id'];
+} else {
+    $is_auth = false;
+    $user_name = "";
+}
 
 $page_title = "Yeticave | Ошибка поиска";
 
@@ -20,7 +32,7 @@ if (!$link) {
 
             if ($search) {
                 $cur_page = $_GET['page'] ?? 1;
-                $page_items = 3;
+                $page_items = 9;
 
                 $stmt = db_get_prepare_stmt($link, "SELECT COUNT(*) as cnt FROM lot WHERE MATCH(name, description) AGAINST(?)", [$search_string]);
                 mysqli_stmt_execute($stmt);
@@ -47,7 +59,20 @@ if (!$link) {
                 $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
                 foreach ($lots as $key => $value) {
-                    $lots[$key]['lot_time'] = $diff_time($value['lot_time']);
+                    $sql = 'SELECT COUNT(id) as count'
+                        . ' FROM rate'
+                        . ' WHERE lot_id = ' . $value['lot_id'];
+                    $result = mysqli_query($link, $sql);
+                    $lots[$key]['count'] = mysqli_fetch_assoc($result)['count'];
+                }
+
+                foreach ($lots as $key => $value) {
+                    $lots[$key]['format_time'] = $diff_time($value['lot_time'])['format'];
+                    $lots[$key]['timer_class'] = $diff_time($value['lot_time'])['timer_class'];
+                }
+
+                foreach ($lots as $key => $value) {
+                    $lots[$key]['rate_status_text'] = $value['count'] . get_noun_plural_form($value['count'], ' ставка ', ' ставки ', ' ставок ');
                 }
 
                 if (isset($lots[0])) {

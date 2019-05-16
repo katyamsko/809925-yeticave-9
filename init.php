@@ -1,4 +1,6 @@
 <?php
+require_once('vendor/autoload.php');
+
     require_once 'functions.php';
 
     $link = mysqli_connect("yeticave", "root", "", "yeticave");

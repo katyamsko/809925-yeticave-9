@@ -1,4 +1,5 @@
 <?php
+require_once('vendor/autoload.php');
 require_once('helpers.php');
 require_once('data.php');
 require_once('functions.php');
@@ -31,7 +32,7 @@ if (!$link) {
         if (isset($_GET['id'])) {
             $id_lot = (int)$_GET['id'];
 
-            $sql = 'SELECT l.name as lot_name, l.start_price, l.lot_time, l.description, l.image, l.end_time, l.step_rate, c.name as category, MAX(r.price) as current_price FROM lot as l '
+            $sql = 'SELECT l.name as lot_name, l.start_price, l.lot_time, l.description, l.image, l.end_time as end_time, l.step_rate, l.author_id as author_id, c.name as category, MAX(r.price) as current_price FROM lot as l '
             . 'JOIN category as c '
             . 'ON l.category_id = c.id '
             . 'JOIN rate as r '
@@ -43,6 +44,10 @@ if (!$link) {
             if ($res) {
                 $lot_array = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 $lot = $lot_array[0];
+
+                $lot['format_time'] = $diff_time($lot['end_time'])['format'];
+                $lot['timer_class'] = $diff_time($lot['end_time'])['timer_class'];
+
 
                 $sql_table = 'SELECT r.rate_time, r.user_id, r.price as offer, r.lot_id, u.name as author_name FROM rate as r'
                         . ' JOIN user as u'
@@ -105,7 +110,9 @@ if (!$link) {
                                     'is_auth' => $is_auth,
                                     'user_flag' => true,
                                     'table_rates' => $table_rates,
-                                    'count' => $count
+                                    'count' => $count,
+                                    'diff_time' => $diff_time,
+                                    'user_id' => $user_id
                                 ]);
                                 $page_title = $lot['lot_name'];
                             } else {
@@ -136,7 +143,9 @@ if (!$link) {
                                             'errors' => $errors,
                                             'id_lot' => $id_lot,
                                             'table_rates' => $table_rates,
-                                            'count' => $count
+                                            'count' => $count,
+                                            'diff_time' => $diff_time,
+                                            'user_id' => $user_id
                                         ]);
                                         $page_title = "Yeticave | Ошибка ставки";
                                     } else {
@@ -161,7 +170,9 @@ if (!$link) {
                                             'is_auth' => $is_auth,
                                             'id_lot' => $id_lot,
                                             'table_rates' => $table_rates,
-                                            'count' => $count
+                                            'count' => $count,
+                                            'diff_time' => $diff_time,
+                                            'user_id' => $user_id
                                         ]);
                                         $page_title = $lot['lot_name'];
                                 }
@@ -179,7 +190,9 @@ if (!$link) {
                             'class_item' => $resultTime['class'],
                             'is_auth' => $is_auth,
                             'table_rates' => $table_rates,
-                            'count' => $count
+                            'count' => $count,
+                            'diff_time' => $diff_time,
+                            'user_id' => $user_id
                         ]);
                         $page_title = $lot['lot_name'];
                     }

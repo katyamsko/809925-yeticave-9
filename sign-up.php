@@ -1,4 +1,5 @@
 <?php
+require_once('vendor/autoload.php');
 require_once('helpers.php');
 require_once('data.php');
 require_once('functions.php');
@@ -52,7 +53,10 @@ if (!$link) {
                     move_uploaded_file($tmp_name, 'uploads/' . $path);
                     $new_lot['path'] = 'uploads/' . $path;
                 }
+            }
 
+            if (!filter_var($new_user['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Введите правильный email';
             }
 
             if (count($errors)) {
