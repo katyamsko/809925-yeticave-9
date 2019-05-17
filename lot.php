@@ -104,14 +104,14 @@ if (!$link) {
                                 $page_content = include_template('lot.php', [
                                     'categories' => $categories,
                                     'lot' => $lot,
-                                    'price' => $price,
+                                    'price' => 'price',
                                     'showedTime' => $resultTime['time'],
                                     'class_item' => $resultTime['class'],
                                     'is_auth' => $is_auth,
                                     'user_flag' => true,
                                     'table_rates' => $table_rates,
                                     'count' => $count,
-                                    'diff_time' => diff_time,
+                                    'diff_time' => 'diff_time',
                                     'user_id' => $user_id
                                 ]);
                                 $page_title = $lot['lot_name'];
@@ -163,14 +163,14 @@ if (!$link) {
                                     $page_content = include_template('lot.php', [
                                         'categories' => $categories,
                                         'lot' => $lot,
-                                        'price' => $price,
+                                        'price' => 'price',
                                         'showedTime' => $resultTime['time'],
                                         'class_item' => $resultTime['class'],
                                         'is_auth' => $is_auth,
                                         'id_lot' => $id_lot,
                                         'table_rates' => $table_rates,
                                         'count' => $count,
-                                        'diff_time' => diff_time,
+                                        'diff_time' => 'diff_time',
                                         'user_id' => $user_id,
                                         'user_flag' => false
                                     ]);

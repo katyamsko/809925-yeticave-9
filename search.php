@@ -24,6 +24,8 @@ if (!$link) {
     $result = mysqli_query($link, $sql);
 
     if ($result) {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
         $lots = [];
         $search = $_GET['q'] ?? '';
         $search_string = trim($search);

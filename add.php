@@ -119,7 +119,6 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-
     'user_name' => $user_name,
     'is_auth' => $is_auth
 ]);

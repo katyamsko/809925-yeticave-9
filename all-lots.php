@@ -1,7 +1,8 @@
 <?php
-
+//require_once('vendor/autoload.php');
 require_once('helpers.php');
 require_once('init.php');
+
 
 session_start();
 
@@ -53,7 +54,7 @@ if (!$link) {
 
             if ($result) {
                 if (mysqli_num_rows($result)) {
-                   $lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                    $lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
                     foreach ($lot as $key => $value) {
                         $sql = 'SELECT COUNT(id) as count'
@@ -73,6 +74,8 @@ if (!$link) {
                     }
 
                     $category = $lot[0]['category'];
+
+                    //print($lot[0]['lot_name']);
 
                     $page_title = "YetiCave | " . $lot[0]['category'];
                     $page_content = include_template('all-lots.php', [
@@ -171,8 +174,8 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name
+    'user_name' => $user_name,
+    'is_auth' => $is_auth
 ]);
 
 print($layout_content);

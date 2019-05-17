@@ -3,7 +3,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $value) :?>
                 <li class="nav__item <?php if ($value['code'] == $lots_category) {
-                    print('nav__item--current');
+                        print('nav__item--current');
                     } ?>">
                     <a href="all-lots.php?cat=<?=$value['code']; ?>"><?=esc($value['name']); ?></a>
                 </li>
@@ -26,7 +26,7 @@
                 <?php foreach ($lot as $value): ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
-                        <img src="<?=$value['lot_image']; ?>" width="350" height="260" alt="<?=$value['name']; ?>">
+                        <img src="<?=$value['lot_image']; ?>" width="350" height="260" alt="<?=esc($value['lot_name']); ?>">
                     </div>
                     <div class="lot__info">
                         <span class="lot__category"><?=$value['category']; ?></span>
