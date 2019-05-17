@@ -1,21 +1,7 @@
 <?php
-require_once('vendor/autoload.php');
+
 require_once('getwinner.php');
-require_once('helpers.php');
-require_once('data.php');
 require_once('functions.php');
-require_once('init.php');
-
-session_start();
-
-if (isset($_SESSION['user'])) {
-    $is_auth = true;
-    $user_name = $_SESSION['user']['name'];
-    $user_id = $_SESSION['user']['id'];
-} else {
-    $is_auth = false;
-    $user_name = "";
-}
 
 $page_title = "Yeticave | Ошибка";
 
@@ -46,8 +32,8 @@ if (!$link) {
             }
 
             foreach ($ads as $key => $value) {
-                $ads[$key]['format_time'] = $diff_time($value['end_time'])['format'];
-                $ads[$key]['timer_class'] = $diff_time($value['end_time'])['timer_class'];
+                $ads[$key]['format_time'] = diff_time($value['end_time'])['format'];
+                $ads[$key]['timer_class'] = diff_time($value['end_time'])['timer_class'];
             }
 
             foreach ($ads as $key => $value) {
@@ -59,7 +45,7 @@ if (!$link) {
             $page_content = include_template('index.php', [
                 'categories' => $categories,
                 'ads' => $ads,
-                'price' => $price
+                'price' => 'price'
             ]);
         } else {
             $error = mysqli_error($link);
@@ -76,7 +62,6 @@ $layout_content = include_template('layout.php', [
     'title' => $page_title,
     'categories' => $categories,
     'ads' => $ads,
-    'price' => $price,
     'is_auth' => $is_auth,
     'user_name' => $user_name
 ]);

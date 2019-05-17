@@ -1,8 +1,6 @@
 <?php
 require_once('vendor/autoload.php');
 require_once('helpers.php');
-require_once('data.php');
-require_once('functions.php');
 require_once('init.php');
 
 session_start();
@@ -14,6 +12,7 @@ if (isset($_SESSION['user'])) {
 } else {
     $is_auth = false;
     $user_name = "";
+    $user_id = null;
 }
 
 
@@ -45,8 +44,8 @@ if (!$link) {
                 $lot_array = mysqli_fetch_all($res, MYSQLI_ASSOC);
                 $lot = $lot_array[0];
 
-                $lot['format_time'] = $diff_time($lot['end_time'])['format'];
-                $lot['timer_class'] = $diff_time($lot['end_time'])['timer_class'];
+                $lot['format_time'] = diff_time($lot['end_time'])['format'];
+                $lot['timer_class'] = diff_time($lot['end_time'])['timer_class'];
 
 
                 $sql_table = 'SELECT r.rate_time, r.user_id, r.price as offer, r.lot_id, u.name as author_name FROM rate as r'
@@ -71,8 +70,6 @@ if (!$link) {
                     $table_rates[$key]['time_diff_text'] = $diff . get_noun_plural_form($diff, ' минута ', ' минуты ', ' минут ') . 'назад';
                 }
 
-
-
                 if ($lot['current_price'] == null) {
                     $lot['current_price'] = $lot['start_price'];
                     $cur_price = $lot['current_price'];
@@ -87,9 +84,7 @@ if (!$link) {
                 }
 
                 if ($lot['lot_name']) {
-
                     if ($is_auth) {
-
                         $sql = 'SELECT * FROM rate'
                             . ' WHERE lot_id = ' . $id_lot
                             . ' ORDER BY price DESC'
@@ -98,7 +93,12 @@ if (!$link) {
 
                         if ($res) {
                             $lot_rates_array = mysqli_fetch_all($res, MYSQLI_ASSOC);
-                            $lot_rates = $lot_rates_array[0];
+
+                            if (isset($lot_rates_array[0])) {
+                                $lot_rates = $lot_rates_array[0];
+                            } else {
+                                $lot_rates['user_id'] = '';
+                            }
 
                             if ($lot_rates['user_id'] == $user_id) {
                                 $page_content = include_template('lot.php', [
@@ -111,14 +111,13 @@ if (!$link) {
                                     'user_flag' => true,
                                     'table_rates' => $table_rates,
                                     'count' => $count,
-                                    'diff_time' => $diff_time,
+                                    'diff_time' => diff_time,
                                     'user_id' => $user_id
                                 ]);
                                 $page_title = $lot['lot_name'];
                             } else {
                                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     $new_rate = $_POST;
-
                                     $required = ['cost'];
                                     $errors = [];
 
@@ -144,8 +143,9 @@ if (!$link) {
                                             'id_lot' => $id_lot,
                                             'table_rates' => $table_rates,
                                             'count' => $count,
-                                            'diff_time' => $diff_time,
-                                            'user_id' => $user_id
+                                            'diff_time' => diff_time,
+                                            'user_id' => $user_id,
+                                            'user_flag' => false
                                         ]);
                                         $page_title = "Yeticave | Ошибка ставки";
                                     } else {
@@ -155,26 +155,26 @@ if (!$link) {
                                         if ($res) {
                                             header("Location: /lot.php?id=" . $id_lot);
                                             exit();
-                                        } else {
-                                            $error = mysqli_error($link);
-                                            $page_content = include_template('error.php', ['error' => $error]);
                                         }
+                                        $error = mysqli_error($link);
+                                        $page_content = include_template('error.php', ['error' => $error]);
                                     }
                                 } else {
                                     $page_content = include_template('lot.php', [
-                                            'categories' => $categories,
-                                            'lot' => $lot,
-                                            'price' => $price,
-                                            'showedTime' => $resultTime['time'],
-                                            'class_item' => $resultTime['class'],
-                                            'is_auth' => $is_auth,
-                                            'id_lot' => $id_lot,
-                                            'table_rates' => $table_rates,
-                                            'count' => $count,
-                                            'diff_time' => $diff_time,
-                                            'user_id' => $user_id
-                                        ]);
-                                        $page_title = $lot['lot_name'];
+                                        'categories' => $categories,
+                                        'lot' => $lot,
+                                        'price' => $price,
+                                        'showedTime' => $resultTime['time'],
+                                        'class_item' => $resultTime['class'],
+                                        'is_auth' => $is_auth,
+                                        'id_lot' => $id_lot,
+                                        'table_rates' => $table_rates,
+                                        'count' => $count,
+                                        'diff_time' => diff_time,
+                                        'user_id' => $user_id,
+                                        'user_flag' => false
+                                    ]);
+                                    $page_title = $lot['lot_name'];
                                 }
                             }
                         } else {
@@ -185,14 +185,15 @@ if (!$link) {
                         $page_content = include_template('lot.php', [
                             'categories' => $categories,
                             'lot' => $lot,
-                            'price' => $price,
+                            'price' => 'price',
                             'showedTime' => $resultTime['time'],
                             'class_item' => $resultTime['class'],
                             'is_auth' => $is_auth,
                             'table_rates' => $table_rates,
                             'count' => $count,
-                            'diff_time' => $diff_time,
-                            'user_id' => $user_id
+                            'diff_time' => 'diff_time',
+                            'user_id' => $user_id,
+                            'user_flag' => false
                         ]);
                         $page_title = $lot['lot_name'];
                     }
@@ -212,13 +213,10 @@ if (!$link) {
     }
 }
 
-
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-    'ads' => $ads,
-    'price' => $price,
     'is_auth' => $is_auth,
     'user_name' => $user_name
 ]);

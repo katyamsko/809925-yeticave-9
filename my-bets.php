@@ -1,8 +1,6 @@
 <?php
 require_once('vendor/autoload.php');
 require_once('helpers.php');
-require_once('data.php');
-require_once('functions.php');
 require_once('init.php');
 
 session_start();
@@ -91,29 +89,31 @@ if (!$link) {
                             $rates_winner = mysqli_fetch_all($res, MYSQLI_ASSOC)[0];
 
                             if ((int)$rates_winner == $user_id) {
+                                print("kek");
                                 $my_rates[$key]['contacts'] = $_SESSION['user']['contacts'];
                                 $my_rates[$key]['rates_item_class'] = 'rates__item--win';
                                 $my_rates[$key]['timing_class'] = 'timer--win';
                                 $my_rates[$key]['timing_format'] = 'Ставка выиграла';
                                 $my_rates[$key]['is_winner'] = true;
                             } else {
+                                print("kaka");
                                 $my_rates[$key]['rates_item_class'] = 'rates__item--end';
                                 $my_rates[$key]['timing_class'] = 'timer--end';
                                 $my_rates[$key]['timing_format'] = 'Торги окончены';
                                 $my_rates[$key]['is_winner'] = false;
                             }
-
                         } else {
                             $error = mysqli_error($link);
                             $page_content = include_template('error.php', ['error' => $error]);
                         }
-
                     } elseif (floor($diff / 3600) <= 1) {
                         $my_rates[$key]['timing_class'] = 'timer--finishing';
                         $my_rates[$key]['timing_format'] = $hours . ':' . $minutes . ":" . $seconds;
+                        $my_rates[$key]['is_winner'] = false;
                     } else {
                         $my_rates[$key]['timing_class'] = '';
                         $my_rates[$key]['timing_format'] = $hours . ':' . $minutes . ":" . $seconds;
+                        $my_rates[$key]['is_winner'] = false;
                     }
                 }
 
@@ -122,14 +122,11 @@ if (!$link) {
                     'my_rates' => $my_rates,
                     'is_auth' => $is_auth
                 ]);
-
                 $page_title = 'Yeticave | Мои ставки';
-
             } else {
                 $error = mysqli_error($link);
                 $page_content = include_template('error.php', ['error' => $error]);
             }
-
         } else {
             $error = 'Ошибка доступа! Войдите на сайт';
             $page_content = include_template('error.php', ['error' => $error]);
@@ -141,13 +138,10 @@ if (!$link) {
     }
 }
 
-
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-    'ads' => $ads,
-    'price' => $price,
     'is_auth' => $is_auth,
     'user_name' => $user_name
 ]);

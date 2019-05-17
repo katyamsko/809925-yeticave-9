@@ -1,8 +1,6 @@
 <?php
-require_once('vendor/autoload.php');
+
 require_once('helpers.php');
-require_once('data.php');
-require_once('functions.php');
 require_once('init.php');
 
 session_start();
@@ -20,15 +18,14 @@ $page_title = "Yeticave | Ошибка";
 
 if ($is_auth) {
     if (!$link) {
-    $error = mysqli_connect_error();
-    $page_content = include_template('error.php', ['error' => $error]);
+        $error = mysqli_connect_error();
+        $page_content = include_template('error.php', ['error' => $error]);
     } else {
         $sql = 'SELECT * FROM category';
         $result = mysqli_query($link, $sql);
 
         if ($result) {
             $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            $page_content = include_template('add.php', ['categories' => $categories]);
             $page_title = "Yeticave | Добавить лот";
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -62,11 +59,9 @@ if ($is_auth) {
                             $errors['lot-date'] = 'Объявление должно быть доступно хотя бы 1 день';
                         }
                     } else {
-                    $errors['lot-date'] = 'Пожалуйста, введите дату в формате ГГГГ-ММ-ДД';
+                        $errors['lot-date'] = 'Пожалуйста, введите дату в формате ГГГГ-ММ-ДД';
                     }
                 }
-
-
 
                 if ($_FILES['lot_image']['size'] > 0) {
                     $tmp_name = $_FILES['lot_image']['tmp_name'];
@@ -81,7 +76,6 @@ if ($is_auth) {
                         move_uploaded_file($tmp_name, 'uploads/' . $path);
                         $new_lot['path'] = 'uploads/' . $path;
                     }
-
                 } else {
                     $errors['lot_image'] = 'Вы не загрузили файл';
                 }
@@ -93,9 +87,7 @@ if ($is_auth) {
                         'errors' => $errors,
                         'dict' => $dict
                     ]);
-
                 } else {
-
                     $sql = 'INSERT INTO lot (lot_time, name, description, image, start_price, end_time, step_rate, author_id, category_id) VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
 
                     $stmt = db_get_prepare_stmt($link, $sql, [$new_lot['lot-name'], $new_lot['message'], $new_lot['path'], $new_lot['lot-rate'], $new_lot['lot-date'], $new_lot['lot-step'], $user_id, $new_lot['category']]);
@@ -107,11 +99,12 @@ if ($is_auth) {
                     }
                 }
             } else {
+                $lot['category'] = '';
                 $page_content = include_template('add.php', [
-                    'categories' => $categories
+                    'categories' => $categories,
+                    'lot' => $lot
                 ]);
             }
-
         } else {
             $error = mysqli_error($link);
             $page_content = include_template('error.php', ['error' => $error]);
@@ -126,8 +119,7 @@ $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'title' => $page_title,
     'categories' => $categories,
-    'ads' => $ads,
-    'price' => $price,
+
     'user_name' => $user_name,
     'is_auth' => $is_auth
 ]);

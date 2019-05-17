@@ -24,7 +24,7 @@
         <nav class="user-menu">
         <?php if ($is_auth): ?>
         <div class="user-menu__logged">
-            <p><?=$user_name; ?></p>
+            <p><?=esc($user_name); ?></p>
             <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
             <a class="user-menu__logout" href="logout.php">Выход</a>
         </div>
@@ -38,8 +38,6 @@
             </li>
         </ul>
         <?php endif; ?>
-        <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
-
         </nav>
     </div>
 </header>
@@ -51,7 +49,10 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $value) :?>
             <!--заполните этот список из массива категорий-->
-            <li class="nav__item <?php if ($value['code'] == $lots_category) print('nav__item--current'); ?>">
+            <li class="nav__item <?php if ($value['code'] == $lots_category) {
+               print('nav__item--current');
+            }
+            ?>">
                 <a href="all-lots.php?cat=<?=$value['code']; ?>"><?=esc($value['name']); ?></a>
             </li>
         <? endforeach; ?>
@@ -98,7 +99,6 @@
         </div>
     </div>
 </footer>
-
 <!-- <script src="flatpickr.js"></script> -->
 <script src="script.js"></script>
 </body>
