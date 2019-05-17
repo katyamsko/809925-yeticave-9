@@ -41,9 +41,13 @@
         </nav>
     </div>
 </header>
-<?=$content; ?>
+<main>
+    <section class="lot-item container">
+        <h2>Ошибка!</h2>
+        <p><?=esc($error); ?></p>
+    </section>
+</main>
 </div>
-
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">

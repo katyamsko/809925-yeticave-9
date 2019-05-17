@@ -15,10 +15,10 @@
                 <?php foreach ($lots as $value) : ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
-                        <img src="<?=$value['lot_image'] ?>" width="350" height="260" alt="<?=$value['lot_name']; ?>">
+                        <img src="<?=esc($value['lot_image']); ?>" width="350" height="260" alt="<?=esc($value['lot_name']); ?>">
                     </div>
                     <div class="lot__info">
-                        <span class="lot__category"><?=$value['category']; ?></span>
+                        <span class="lot__category"><?=esc($value['category']); ?></span>
                         <h3 class="lot__title"><a class="text-link" href="<?="lot.php" . "?id=" . $value['lot_id']; ?>"><?=esc($value['lot_name']); ?></a></h3>
                         <div class="lot__state">
                             <div class="lot__rate">
@@ -33,7 +33,7 @@
                                     ?>
                                     <?=$span_string; ?>
                                 </span>
-                                <span class="lot__cost"><?=$value['start_price']; ?><b class="rub">р</b></span>
+                                <span class="lot__cost"><?=esc(price($value['start_price'])); ?></span>
                             </div>
                             <div class="lot__timer timer <?=$value['timer_class']; ?>">
                                 <?=$value['format_time']; ?>
@@ -60,19 +60,19 @@
             </li>
             <?php foreach ($pages as $page): ?>
                 <?php
-                    if ($cur_page != $page) {
+                    if ((int)$cur_page !== (int)$page) {
                         $href = 'href="search.php?q='.$search_string.'&find=Найти&page='.$page.'"';
                     } else {
                         $href = '';
                     }
                 ?>
-            <li class="pagination-item <?php if ($page == $cur_page): ?>pagination__item--active<?php endif; ?>">
+            <li class="pagination-item <?php if ((int)$page === (int)$cur_page): ?>pagination__item--active<?php endif; ?>">
                 <a <?=$href; ?>><?=$page;?></a>
             </li>
             <?php endforeach; ?>
             <li class="pagination-item pagination-item-next">
                 <?php
-                    if ($cur_page != $pages_count) {
+                    if ((int)$cur_page !== (int)$pages_count) {
                         $href = 'href="search.php?q='.$search_string.'&find=Найти&page='.($cur_page+1).'"';
                     } else {
                         $href = '';

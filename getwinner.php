@@ -41,7 +41,7 @@ if ($result && $is_auth && mysqli_num_rows($result)) {
             $result = true;
 
             if($result) {
-                if ($user_id == $winner_id) {
+                if ((int)$user_id === (int)$winner_id) {
                     $transport = new Swift_SmtpTransport("phpdemo.ru", 25);
                     $transport->setUsername("keks@phpdemo.ru");
                     $transport->setPassword("htmlacademy");

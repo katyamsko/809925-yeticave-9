@@ -81,44 +81,52 @@ $resultTime = days_count();
  *@return array $result_time Массив, в котором по ключу 'format' находится оставшееся до $end_time время в формате ЧЧ:ММ:СС, а по ключу 'span' может находиться строка 'Торги окончены', если в качестве параметра укзаан прошедший момент времени
  */
 function diff_time(string $end_time) : array {
-    $now = 'now';
-    $diff = strtotime($end_time) - strtotime($now);
+    if ($end_time !== null) {
+        $now = 'now';
+        $diff = strtotime($end_time) - strtotime($now);
 
-    $hours = floor($diff / 3600);
-    $minutes = floor(($diff - $hours * 3600) / 60);
-    $seconds = $diff - $hours * 3600 - $minutes * 60;
+        $hours = floor($diff / 3600);
+        $minutes = floor(($diff - $hours * 3600) / 60);
+        $seconds = $diff - $hours * 3600 - $minutes * 60;
 
-    $result_time = [];
+        $result_time = [];
 
-    if ($diff < 0) {
-        $result_time['span'] = 'Торги окончены';
-    } else {
-        if ($hours < 1) {
-            $result_time['timer_class'] = 'timer--finishing';
-        } else {
+        if ($diff < 0) {
+            $result_time['span'] = 'Торги окончены';
+            $result_time['format'] = 'Аукцион закрыт';
             $result_time['timer_class'] = '';
-        }
+        } else {
+            if ($hours < 1) {
+                $result_time['timer_class'] = 'timer--finishing';
+            } else {
+                $result_time['timer_class'] = '';
+            }
 
-        if ($hours < 10 && $hours > 0) {
-            $hours = '0' . $hours;
-        } elseif ($hours == 0) {
-            $hours = '00';
-        }
+            if ($hours < 10 && $hours > 0) {
+                $hours = '0' . $hours;
+            } elseif ($hours == 0) {
+                $hours = '00';
+            }
 
-        if ($minutes < 10) {
-            $minutes = '0' . $minutes;
-        } elseif ($minutes == 0) {
-            $minutes = '00';
-        }
+            if ($minutes < 10) {
+                $minutes = '0' . $minutes;
+            } elseif ($minutes == 0) {
+                $minutes = '00';
+            }
 
-        if ($seconds < 10) {
-            $seconds = '0' . $seconds;
-        } elseif ($seconds == 0) {
-            $seconds = '00';
-        }
+            if ($seconds < 10) {
+                $seconds = '0' . $seconds;
+            } elseif ($seconds == 0) {
+                $seconds = '00';
+            }
 
-        $result_time['format'] = $hours . ':' . $minutes . ':' . $seconds;
+            $result_time['format'] = $hours . ':' . $minutes . ':' . $seconds;
+        }
+    } else {
+        $result_time['format'] = '';
+        $result_time['timer_class'] = '';
     }
+
     return $result_time;
 }
 

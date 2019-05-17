@@ -15,17 +15,17 @@
             <tr class="rates__item <?=$value['rates_item_class']; ?>">
                 <td class="rates__info">
                     <div class="rates__img">
-                        <img src="<?=$value['lot_image']; ?>" width="54" height="40" alt="<?=$value['lot_image']; ?>">
+                        <img src="<?=esc($value['lot_image']); ?>" width="54" height="40" alt="<?=esc($value['lot_name']); ?>">
                     </div>
-                    <h3 class="rates__title"><a href="<?="lot.php" . "?id=" . $value['lot_id']; ?>"><?=$value['lot_name']; ?></a></h3>
+                    <h3 class="rates__title"><a href="<?="lot.php" . "?id=" . $value['lot_id']; ?>"><?=esc($value['lot_name']); ?></a></h3>
 
                     <?php if ($value['is_winner']): ?>
-                    <p><?=$value['contacts']; ?></p>
+                    <p><?=esc($value['contacts']); ?></p>
                     <?php endif; ?>
 
                 </td>
                 <td class="rates__category">
-                    <?=$value['category']; ?>
+                    <?=esc($value['category']); ?>
                 </td>
                 <td class="rates__timer">
                     <div class="timer <?=$value['timing_class']; ?>"><?=$value['timing_format']; ?></div>

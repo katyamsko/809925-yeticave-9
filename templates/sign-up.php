@@ -18,7 +18,7 @@
     <form class="form container <?=$class; ?>" action="sign-up.php" method="post" autocomplete="off" enctype="multipart/form-data">
 
         <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";
-            $value = isset($new_user['email']) ? $new_user['email'] : ""; ?>
+            $value = isset($new_user['email']) ? esc($new_user['email']) : ""; ?>
 
         <h2>Регистрация нового аккаунта</h2>
         <div class="form__item  <?=$classname; ?>">
@@ -36,7 +36,7 @@
         </div>
 
         <?php $classname = isset($errors['name']) ? "form__item--invalid" : "";
-            $value = isset($new_user['name']) ? $new_user['name'] : ""; ?>
+            $value = isset($new_user['name']) ? esc($new_user['name']) : ""; ?>
 
         <div class="form__item <?=$classname; ?>">
             <label for="name">Имя <sup>*</sup></label>
@@ -45,7 +45,7 @@
         </div>
 
         <?php $classname = isset($errors['message']) ? "form__item--invalid" : "";
-            $value = isset($new_user['message']) ? $new_user['message'] : ""; ?>
+            $value = isset($new_user['message']) ? esc($new_user['message']) : ""; ?>
 
         <div class="form__item <?=$classname; ?>">
             <label for="message">Контактные данные <sup>*</sup></label>

@@ -20,7 +20,7 @@
         <div class="form__container-two">
 
             <?php $classname = isset($errors['lot-name']) ? "form__item--invalid" : "";
-                $value = isset($lot['lot-name']) ? $lot['lot-name'] : ""; ?>
+                $value = isset($lot['lot-name']) ? esc($lot['lot-name']) : ""; ?>
 
             <div class="form__item <?=$classname; ?>">
                 <label for="lot-name">Наименование <sup>*</sup></label>
@@ -36,7 +36,7 @@
                 <select id="category" name="category">
                     <?php foreach ($categories as $value) :?>
                         <option
-                        <?php if ($lot['category'] == $value['id']) {
+                        <?php if ((int)$lot['category'] == (int)$value['id']) {
                             print('selected');
                         }
                         ?> value="<?=$value['id']; ?>"><?=esc($value['name']); ?></option>
@@ -47,7 +47,7 @@
         </div>
 
         <?php $classname = isset($errors['message']) ? "form__item--invalid" : "";
-            $value = isset($lot['message']) ? $lot['message'] : ""; ?>
+            $value = isset($lot['message']) ? esc($lot['message']) : ""; ?>
 
         <div class="form__item form__item--wide <?=$classname; ?>">
             <label for="message">Описание <sup>*</sup></label>
@@ -71,7 +71,7 @@
         <div class="form__container-three">
 
             <?php $classname = isset($errors['lot-rate']) ? "form__item--invalid" : "";
-                $value = isset($lot['lot-rate']) ? $lot['lot-rate'] : ""; ?>
+                $value = isset($lot['lot-rate']) ? esc($lot['lot-rate']) : ""; ?>
 
             <div class="form__item form__item--small <?=$classname; ?>">
                 <label for="lot-rate">Начальная цена <sup>*</sup></label>
@@ -80,7 +80,7 @@
             </div>
 
             <?php $classname = isset($errors['lot-step']) ? "form__item--invalid" : "";
-                $value = isset($lot['lot-step']) ? $lot['lot-step'] : ""; ?>
+                $value = isset($lot['lot-step']) ? esc($lot['lot-step']) : ""; ?>
 
             <div class="form__item form__item--small <?=$classname; ?>">
                 <label for="lot-step">Шаг ставки <sup>*</sup></label>
@@ -89,7 +89,7 @@
             </div>
 
             <?php $classname = isset($errors['lot-date']) ? "form__item--invalid" : "";
-                $value = isset($lot['lot-date']) ? $lot['lot-date'] : ""; ?>
+                $value = isset($lot['lot-date']) ? esc($lot['lot-date']) : ""; ?>
 
             <div class="form__item <?=$classname; ?>">
                 <label for="lot-date">Дата окончания торгов <sup>*</sup></label>

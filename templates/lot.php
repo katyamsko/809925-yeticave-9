@@ -19,7 +19,7 @@
                 <p class="lot-item__description"><?=esc($lot['description']); ?> </p>
             </div>
             <div class="lot-item__right">
-                <?php if ($is_auth && !$user_flag && !isset($diff_time($lot['end_time'])['span']) && ($lot['author_id'] != $user_id)): ?>
+                <?php if ($is_auth && !$user_flag && !isset($diff_time($lot['end_time'])['span']) && ((int)$lot['author_id'] !== (int)$user_id)): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer <?=$lot['timer_class']; ?>">
                         <?=$lot['format_time']; ?>
@@ -27,10 +27,10 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?=$lot['current_price']; ?></span>
+                            <span class="lot-item__cost"><?=esc(price($lot['current_price'])); ?></span>
                         </div>
                         <div class="lot-item__min-cost">
-                            Мин. ставка <span><?=$lot['minimal_price']; ?></span>
+                            Мин. ставка <span><?=esc(price($lot['minimal_price'])); ?></span>
                         </div>
                     </div>
                     <?php
@@ -43,7 +43,7 @@
                     <form class="lot-item__form <?=$class; ?>" action="<?="lot.php?id=" . $id_lot; ?>" method="post" autocomplete="off">
 
                         <?php $classname = isset($errors['cost']) ? "form__item--invalid" : "";
-                            $value = isset($lot['cost']) ? $lot['cost'] : ""; ?>
+                            $value = isset($lot['cost']) ? esc($lot['cost']) : ""; ?>
 
                         <p class="lot-item__form-item form__item <?=$classname; ?>">
                             <label for="cost">Ваша ставка</label>
@@ -59,8 +59,8 @@
                     <table class="history__list">
                         <?php foreach ($table_rates as $key => $value) :?>
                         <tr class="history__item">
-                            <td class="history__name"><?=$value['author_name']; ?></td>
-                            <td class="history__price"><?=$value['offer']; ?></td>
+                            <td class="history__name"><?=esc($value['author_name']); ?></td>
+                            <td class="history__price"><?=esc($value['offer']); ?></td>
                             <td class="history__time"><?=$value['time_diff_text']; ?></td>
                         </tr>
                         <? endforeach; ?>

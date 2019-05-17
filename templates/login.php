@@ -19,7 +19,7 @@
         <h2>Вход</h2>
 
         <?php $classname = isset($errors['email']) ? "form__item--invalid" : "";
-            $value = isset($form['email']) ? $form['email'] : ""; ?>
+            $value = isset($form['email']) ? esc($form['email']) : ""; ?>
 
         <div class="form__item <?=$classname; ?>">
             <label for="email">E-mail <sup>*</sup></label>
